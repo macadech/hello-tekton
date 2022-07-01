@@ -35,6 +35,9 @@ spec:
       default: "0"
     - name: inventoryRepo
       description: The variable storing git integration for the repository storing build inventory with the toolchain
+    - name: git-access-token
+      description: illustrate alternate way to provide/get git access token
+      default: ""
   resourcetemplates:
     - apiVersion: v1
       kind: PersistentVolumeClaim
@@ -83,6 +86,8 @@ spec:
           value: $(params.clusterNamespace)
         - name: inventoryRepo
           value: $(params.inventoryRepo)
+        - name: git-access-token
+          value: $(params.git-access-token)
         - name: pipeline-debug
           value: $(params.pipeline-debug)
 ---
