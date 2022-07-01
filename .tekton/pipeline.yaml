@@ -84,11 +84,6 @@ spec:
           value: $(params.inventoryRepo)
         - name: branch
           value: "master"
-        - name: apikey
-          value: $(params.apikey)
-        - name: appname
-          value: $(params.appName)
-        - name: pipeline-debug
           value: $(params.pipeline-debug)
         - name: git-credentials-json-file
           value: credentials.json
