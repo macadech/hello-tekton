@@ -39,8 +39,6 @@ spec:
       description: image name
     - name: pipeline-debug
       default: "0"
-    - name: pr-url
-      description: pr url
     - name: commit-timestamp
     - name: scm-type
     - name: project-id
@@ -50,8 +48,9 @@ spec:
       default: "true"
     - name: inventoryRepo
       description: The variable storing git integration for the repository storing build inventory with the toolchain
-    - name: insights
-      description: The variable storing DevOps Insight integration with the toolchain
+    - name: git-access-token
+      description: illustrate alternate way to provide/get git access token
+      default: ""
   workspaces:
     - name: pipeline-ws
   tasks:
