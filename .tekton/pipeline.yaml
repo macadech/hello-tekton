@@ -8,8 +8,6 @@ spec:
     - name: repository
       description: the git repo containing source code. If empty, the repository url will be found from toolchain
       default: ""
-    - name: apikey
-      description: the ibmcloud api key
     - name: branch
       description: the branch for the git repo
       default: "master"
