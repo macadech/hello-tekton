@@ -92,4 +92,4 @@ spec:
       workspaces:
       - name: output
         workspace: pipeline-pvc
-          subpath: inventory-repo
+        subpath: inventory-repo
