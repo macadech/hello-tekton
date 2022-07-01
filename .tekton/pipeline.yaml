@@ -8,6 +8,11 @@ spec:
       description: the git repo
     - name: revision
       description: the branch for the git repo
+    - name: branch
+      description: the branch for the git repo
+      default: "master"
+    - name: inventoryRepo
+      description: The variable storing git integration for the repository storing build inventory with the toolchain
     - name: apikey
       description: the ibmcloud api key
     - name: registryNamespace
@@ -23,6 +28,10 @@ spec:
     - name: clusterNamespace
       description: The Kubernetes cluster namespace
       default: prod
+    - name: appName
+      description: application name
+    - name: imageName
+      description: image name
   workspaces:
   - name: pipeline-pvc
   tasks:
@@ -42,7 +51,7 @@ spec:
           value: $(params.registryRegion)
       workspaces:
       - name: task-pvc
-        workspace: pipeline-pvc          
+        workspace: pipeline-pvc
     - name: pipeline-validate-task
       runAfter: [pipeline-build-task]
       taskRef:
@@ -58,24 +67,29 @@ spec:
           value: $(params.registryRegion)
       workspaces:
       - name: task-pvc
-        workspace: pipeline-pvc            
-    - name: pipeline-deploy-task
+        workspace: pipeline-pvc
+    - name: pipeline-clone-inventory-task
       runAfter: [pipeline-validate-task]
       taskRef:
-        name: deploy-task
+        name: git-clone-repo
       params:
+        - name: continuous-delivery-context-secret
+          value: "secure-properties"
+        - name: ibmcloud-apikey-secret-key
+          value: "toolchain-apikey"
         - name: repository
-          value: $(params.repository)
-        - name: revision
-          value: $(params.revision)
+          value: $(params.inventoryRepo)
+        - name: branch
+          value: "master"
         - name: apikey
           value: $(params.apikey)
-        - name: cluster
-          value: $(params.cluster)
-        - name: clusterRegion
-          value: $(params.clusterRegion)
-        - name: clusterNamespace
-          value: $(params.clusterNamespace)
+        - name: appname
+          value: $(params.appName)
+        - name: pipeline-debug
+          value: $(params.pipeline-debug)
+        - name: git-credentials-json-file
+          value: credentials.json
       workspaces:
-      - name: task-pvc
-        workspace: pipeline-pvc  
+      - name: output
+        workspace: pipeline-pvc
+          subpath: inventory-repo
