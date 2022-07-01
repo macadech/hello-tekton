@@ -81,6 +81,8 @@ spec:
           value: $(params.clusterRegion)
         - name: clusterNamespace
           value: $(params.clusterNamespace)
+        - name: inventoryRepo
+          value: $(params.inventoryRepo)
         - name: pipeline-debug
           value: $(params.pipeline-debug)
 ---
