@@ -6,11 +6,12 @@ spec:
   params:
     - name: repository
       description: the git repo
-    - name: revision
-      description: the branch for the git repo
     - name: branch
       description: the branch for the git repo
       default: "master"
+    - name: revision
+      description: the git revision/commit for the git repo
+      default: ""
     - name: inventoryRepo
       description: The variable storing git integration for the repository storing build inventory with the toolchain
     - name: apikey
@@ -44,7 +45,7 @@ spec:
         - name: repository
           value: $(params.repository)
         - name: revision
-          value: $(params.revision)
+          value: $(params.branch)
         - name: apikey
           value: $(params.apikey)
         - name: registryNamespace
@@ -62,7 +63,7 @@ spec:
         - name: repository
           value: $(params.repository)
         - name: revision
-          value: $(params.revision)
+          value: $(params.branch)
         - name: apikey
           value: $(params.apikey)
         - name: registryRegion
