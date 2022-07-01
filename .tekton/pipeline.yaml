@@ -32,6 +32,8 @@ spec:
       description: application name
     - name: imageName
       description: image name
+    - name: pipeline-debug
+      default: "0"
   workspaces:
   - name: pipeline-pvc
   tasks:
