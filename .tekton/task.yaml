@@ -333,7 +333,7 @@ spec:
           git commit -m "Update Evidence"
           if [ -z "${DEPLOYMENT_FILE}" ]; then DEPLOYMENT_FILE=deploy.yaml ; fi
           if [ -f ${APPNAME}/${DEPLOYMENT_FILE} ]; then
-              sed -i "s~^\([[:blank:]]*\)image:.*$~\1image: ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG}~" ${APPNAME}/${DEPLOYMENT_FILE}
+              sed -i "s~^\([[:blank:]]*\)image:.*$~\1image: ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAGS}~" ${APPNAME}/${DEPLOYMENT_FILE}
               cat ${APPNAME}/${DEPLOYMENT_FILE}
           fi
           git commit -m "Update Configuration" ${APPNAME}/${DEPLOYMENT_FILE}
