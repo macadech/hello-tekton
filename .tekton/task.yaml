@@ -315,6 +315,8 @@ spec:
           value: $(params.image-digest)
         - name: INVENTORY_FILE
           value: "inventory.json"
+        - name: DEPLOY_FILE
+          value: "deploy.yaml"
         - name: ENV_FILE
           value: $(params.shuttle-properties-file)
       script: |
@@ -329,6 +331,12 @@ spec:
           jq . inventory-info.json > $INVENTORY_FILE
           git add ./$INVENTORY_FILE
           git commit -m "Update Evidence"
+          if [ -z "${DEPLOYMENT_FILE}" ]; then DEPLOYMENT_FILE=deploy.yaml ; fi
+          if [ -f ${APPNAME}/${DEPLOYMENT_FILE} ]; then
+              sed -i "s~^\([[:blank:]]*\)image:.*$~\1image: ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${IMAGE_TAG}~" ${APPNAME}/${DEPLOYMENT_FILE}
+              cat ${APPNAME}/${DEPLOYMENT_FILE}
+          fi
+          git commit -m "Update Configuration" ${APPNAME}/${DEPLOYMENT_FILE}
           git tag ${PIPELINE_RUN_ID}
           git push  origin master
           git push --tags
