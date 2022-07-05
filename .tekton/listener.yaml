@@ -2,7 +2,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
-  name: trigger-template-secure-kube
+  name: trigger-template-hello-app
 spec:
   params:
     - name: repository
@@ -38,8 +38,6 @@ spec:
       default: "false"
     - name: pipeline-debug
       default: "0"
-    - name: pr-url
-      description: PR url
     - name: apikey
     - name: commit-timestamp
       description: commit timestamp
@@ -59,7 +57,7 @@ spec:
     - apiVersion: v1
       kind: PersistentVolumeClaim
       metadata:
-        name: secure-app-$(uid)-pvc
+        name: hello-tekton-$(uid)-pvc
       spec:
         resources:
           requests:
@@ -70,7 +68,7 @@ spec:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
-        name: secure-app-$(uid)
+        name: hello-tekton-$(uid)
       spec:
         pipelineRef:
           name: hello-pipeline
@@ -119,8 +117,6 @@ spec:
             value: $(params.apikey)
           - name: git-access-token
             value: $(params.git-access-token)
-          - name: pr-url
-            value: $(params.pr-url)
           - name: commit-timestamp
             value: $(params.commit-timestamp)
           - name: scm-type
@@ -134,7 +130,7 @@ spec:
         workspaces:
           - name: pipeline-ws
             persistentVolumeClaim:
-              claimName: secure-app-$(uid)-pvc
+              claimName: hello-tekton-$(uid)-pvc
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
@@ -152,35 +148,7 @@ spec:
     - binding:
         name: trigger-binding-manual
       template:
-        name: trigger-template-secure-kube
----
-apiVersion: tekton.dev/v1beta1
-kind: TriggerBinding
-metadata:
-  name: github-ent-commit
-spec:
-  params:
-    - name: branch
-      value: $(event.ref)
-    - name: commit-id
-      value: $(event.after)
-    - name: commit-timestamp
-      value: $(event.repository.pushed_at)
-    - name: repository
-      value: $(event.repository.html_url)
-    - name: scm-type
-      value: "github-ent"
----
-apiVersion: tekton.dev/v1beta1
-kind: EventListener
-metadata:
-  name: github-ent-commit
-spec:
-  triggers:
-    - bindings:
-        - name: github-ent-commit
-      template:
-        name: trigger-template-secure-kube
+        name: trigger-template-hello-app
 ---
 apiVersion: tekton.dev/v1beta1
 kind: TriggerBinding
@@ -208,62 +176,4 @@ spec:
     - bindings:
         - name: github-commit
       template:
-        name: trigger-template-secure-kube
----
-apiVersion: tekton.dev/v1beta1
-kind: TriggerBinding
-metadata:
-  name: grit-or-gitlab-commit
-spec:
-  params:
-    - name: branch
-      value: $(event.ref)
-    - name: commit-id
-      value: $(event.checkout_sha)
-    - name: commit-timestamp
-      value: $(event.commits[0].timestamp)
-    - name: repository
-      value: $(event.project.http_url)
-    - name: scm-type
-      value: "gitlab"
----
-apiVersion: tekton.dev/v1beta1
-kind: EventListener
-metadata:
-  name: grit-or-gitlab-commit
-spec:
-  triggers:
-    - bindings:
-        - name: grit-or-gitlab-commit
-      template:
-        name: trigger-template-secure-kube
----
-apiVersion: tekton.dev/v1beta1
-kind: TriggerBinding
-metadata:
-  name: bitbucket-commit
-spec:
-  params:
-    - name: repository
-      value: "$(event.repository.links.html.href)"
-    - name: revision
-      value: "$(event.push.changes[0].new.target.hash)"
-    - name: branch
-      value: "$(event.push.changes[0].new.name)"
-    - name: commit-timestamp
-      value: "$(event.pull_request.head.repo.pushed_at)"
-    - name: commit-id
-      value: "$(event.pull_request.head.sha)"
-    - name: scm-type
-      value: "bitbucket"
----
-apiVersion: tekton.dev/v1beta1
-kind: EventListener
-metadata:
-  name: bitbucket-commit
-spec:
-  triggers:
-    - binding:
-        name: bitbucket-commit
-      template:
-        name: trigger-template-secure-kube
+        name: trigger-template-hello-app
