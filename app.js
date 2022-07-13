@@ -25,7 +25,7 @@ if (process.env.PORT) {
 
 var app = express();
 app.get('/', function (req, res) {
-  res.send("Welcome to IBM Cloud DevOps with Tekton! Let's try the pipeline by committing a change.");
+  res.send("Welcome to IBM Cloud DevOps with Tekton! Let's try the pipeline by committing a change in Github.");
 });
 
 app.listen(PORT);
